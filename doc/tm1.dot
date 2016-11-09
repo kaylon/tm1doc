@@ -1,0 +1,16 @@
+digraph "TM1 Server" {
+Process -> Cube  [ label="creates" ]
+Process -> Cube  [ label="loads" ]
+Process -> Dimension [ label="creates" ]
+Process -> DataSource [ label="has" ]
+DataSource -> ODBC  [ label="is of" ]
+DataSource -> Text  [ label="is of" ]
+DataSource -> None  [ label="can be" ]
+Cube -> Dimension  [ label="has" ]
+Dimension -> Subset  [ label="has" ]
+Rule -> Cube  [ label="calculates on" ]
+Cube -> Rule  [ label="supplies data to" ]
+View -> Cube  [ label="shows data from" ]
+View -> Subset   [ label="has" ]
+DataSource -> View  [ label="is of" ]
+}
