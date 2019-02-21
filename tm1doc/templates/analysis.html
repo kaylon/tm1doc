@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <section class="section">
+        <div class="container is-fluid">
+            <h2 class="title is-3">Dataflow Analysis</h2>
+            <figure class="image">
+                <img src="data:image/svg;base64,{{ flow|safe }}">
+            </figure>
+
+
+        </div>
+    </section>
+
+
+{% endblock %}
+{% block scripts %} {{ super() }}
+{% endblock %}

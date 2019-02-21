@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <section class="section">
+        <div class="container">
+        <h1 class="title is-3">{{server }}</h1>
+            <div class="columns">
+                <div class="column">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="subtitle is-5"><span class="icon"><i class="fas fa-cubes"></i></span> Cubes</h3></div>
+                        <div class="card-content">
+                            <ul>
+                                {% for cube in cubes %}
+                                    <li>{{ cube.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="column">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="subtitle is-5"><span class="icon"><i class="fas fa-grip-horizontal"></i></span> Dimensions</h3></div>
+                        <div class="card-content">
+                            <ul>
+                                {% for dimension in dimensions %}
+                                    <li>{{ dimension.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="subtitle is-5"><span class="icon"><i class="fas fa-code"></i></span> Processes</h3></div>
+                        <div class="card-content">
+
+                            <ul>
+                                {% for process in processes %}
+                                    <li>{{ process.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block scripts %} {{ super() }}
+{% endblock %}

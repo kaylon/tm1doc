@@ -1,0 +1,8 @@
+flask>=latest
+flask-bootstrap>=latest
+requests>=latest
+requests_cache>=latest
+graphviz>=latest
+numpy==1.15.4
+pandas==0.23.4
+TM1py>=1.2.1

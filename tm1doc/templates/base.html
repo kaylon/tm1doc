@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        {% block title %}
+            {% if title %}
+                TM1Doc - {{ title }}
+            {% else %}
+                Welcome to TM1Doc
+            {% endif %}
+        {% endblock %}
+    </title>
+    <!--<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.css') }}"> -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bulma.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+</head>
+
+<body>
+
+{% block navbar %}
+    <nav class="navbar is-dark " role="navigation" aria-label="main navigation">
+        <div class="navbar-brand has-text-white">
+            <a class="navbar-item is-3" href="{{ url_for('index') }}">
+                <span class="icon"><i class="fas fa-stethoscope"></i></span> TM1Doc
+            </a>
+            <div class="navbar-burger burger"
+                 onclick="document.querySelector('.navbar-menu').classList.toggle('is-active');">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="{{ url_for('overview') }}"><span class="icon"><i
+                        class="fas fa-eye"></i></span> Overview</a>
+                <a class="navbar-item" href="{{ url_for('dimensions') }}"><span class="icon"><i
+                        class="fas fa-th-list"></i></span> Dimensions</a>
+                <a class="navbar-item" href="{{ url_for('analysis') }}"><span class="icon"><i
+                        class="fas fa-wind"></i></span> Analysis </a>
+                <a class="navbar-item" href="{{ url_for('refresh') }}"><span class="icon"><i
+                        class="fas fa-sync-alt"></i></span> Refresh </a>
+
+
+            </div>
+        </div>
+
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="buttons">
+
+                    <a class="button is-primary" href="{{ url_for('index') }}"><strong>
+                        {% if context.session.instance_id is defined %}
+                            {{ context.instances[context.session.instance_id].name }}
+                        {% else %}
+                            Select Instance
+                        {% endif %}</strong></a>
+
+
+                </div>
+            </div>
+        </div>
+
+    </nav>
+
+
+{% endblock %}
+
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="notification is-primary">
+                <button class="delete"></button>
+                {{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
+{% block content %}
+
+
+
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-info" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {# application content needs to be provided in the app_content block #}
+        {% block app_content %}{% endblock %}
+    </div>
+{% endblock %}
+
+</body>
+</html>
+

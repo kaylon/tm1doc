@@ -1,0 +1,15 @@
+tm1doc:
+  build: .
+  environment:
+    FLASK_ENV: development
+    FLASK_APP: tm1doc
+  container_name: tm1doc
+  hostname: tm1doc
+  command: flask run --with-threads --debugger --reload --host tm1doc --port 5000
+  restart: unless-stopped
+  expose:
+    - 5000
+  ports:
+    - 5000:5000
+  volumes:
+    - .:/srv/app

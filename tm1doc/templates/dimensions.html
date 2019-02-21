@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <section class="section">
+        <div class="container">
+            <table class="table is-striped is-narrow is-hoverable">
+                <thead>
+                <tr>
+                    <th>Dimension</th>
+                    <th>Process</th>
+                    <th>Source Type</th>
+                    <th>Source</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for dimension_name, dimension in dimensions.items() %}
+                    <tr>
+                        <td>{{ dimension_name }}</td>
+                        <td>{{ dimension.process or '-' }}</td>
+                        <td>{{ dimension.source_type or '-'}}</td>
+                        <td>{{ dimension.source or '-'}}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}
+{% block scripts %} {{ super() }}
+{% endblock %}

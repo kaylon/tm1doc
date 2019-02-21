@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <section class="section">
+        <div class="container">
+            <h1 class="title is-3">Instances Available:</h1>
+
+            <div class="card">
+                <ul>
+                    {% for instance in context.instances %}
+                        <li><a href="{{ url_for('select_instance', instance_name=instance.name) }}">{{ instance.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block scripts %} {{ super() }}
+{% endblock %}
