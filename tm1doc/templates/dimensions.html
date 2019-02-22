@@ -19,8 +19,14 @@
                     <tr>
                         <td>{{ dimension_name }}</td>
                         <td>{{ dimension.process or '-' }}</td>
-                        <td>{{ dimension.source_type or '-'}}</td>
-                        <td>{{ dimension.source or '-'}}</td>
+                        <td>
+                            {% if dimension.source_type == 'ODBC' %}
+                                <span class="icon"><i class="fas fa-database"></i></span>{% endif %}
+                            {% if dimension.source_type == 'Text' %}
+                                <span class="icon"><i class="fas fa-file-csv "></i></span>{% endif %}
+                            {{ dimension.source_type or '-' }}
+                        </td>
+                        <td>{{ dimension.source or '-' }}</td>
                     </tr>
                 {% endfor %}
 
