@@ -8,7 +8,8 @@ class Config:
 
     @staticmethod
     def get_tm1_instances():
-        # Currently only exactly one instance is supported
+        # There has to be at least one instance.
+        #
         instances = []
         instances.append({'address': 'https://127.0.0.1:42/api/v1/',
                           'user': 'admin',

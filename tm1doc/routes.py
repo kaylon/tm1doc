@@ -64,16 +64,15 @@ def dimensions():
 
 @tm1doc.route('/select_instance/<instance_name>')
 def select_instance(instance_name):
-    # find instance or default to the first
-
-    session['instance_id'] = 0
+    # find instance
     instance_was_found = False
     for id, instance in enumerate(instances):
         if instance.name == instance_name:
             session['instance_id'] = id
             instance_was_found = True
     if not instance_was_found:
-        flash(f'Instance {instance_name} does not exist. Using {instances[0].name}')
+        flash(f'Instance {instance_name} does not exist. Using Select an existing one')
+        return redirect(url_for('index'))
     return redirect(url_for('overview'))
 
 
@@ -96,7 +95,7 @@ def overview():
                            cubes=filter(filter_technical_objects, tm1_server.cubes),
                            dimensions=filter(filter_technical_objects, tm1_server.dimensions),
                            processes=filter(filter_technical_objects, tm1_server.processes),
-                           server=tm1_server.get_server_name(),
+                           #server=tm1_server.get_server_name(),
                            )
 
 
