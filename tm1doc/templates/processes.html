@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <section class="section">
+        <div class="container">
+            <table class="table is-striped is-narrow is-hoverable">
+                <thead>
+                <tr>
+                    <th>Process Name</th>
+                    <th>Average Duration</th>
+                    <th>Last Duration</th>
+                    <th>Last successful run</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for process in processes %}
+                    {# we actually need to check with == ture because we replacre the NANs with '-' so it would #}
+                    {# always hit otherwise #}
+                    {% if process['process_exists'] == True %}
+                    <tr>
+                        <td>{{ process['Process name'] }}</td>
+                        <td>{{ process['Average duration'] }} </td>
+                        <td>{{ process['Last duration'] }} </td>
+                        <td>{{ process['Last successful run'] }}</td>
+                    {# <td>{{  process }}</td> #}
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}
+{% block scripts %} {{ super() }}
+{% endblock %}

@@ -7,7 +7,7 @@ UNSTABLE! use @ your own risk
 
 docker
 docker-compose
- 
+
 
 ## Usage
 Move config.example.py to config.py and edit to match your environment.  
@@ -29,6 +29,7 @@ It is MIT so steal it, tune it, break it and make it better.
 ## Feature Requests
 
 
+* [ ] Move docker image to ubuntu, alpine takes ages to compile dependencies, for ubuntu they come as binary
 * [ ] Make sure cache clearing actually works ...
 * [ ] Migrate ALL THE THINGS to tm1py
 - [ ] Stop docker from writing shit as root into local folder

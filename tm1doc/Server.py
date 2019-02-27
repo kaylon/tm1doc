@@ -1,6 +1,7 @@
 from collections import OrderedDict
 import requests
 import json
+import pandas as pd
 from tm1doc.Process import Process
 from tm1doc.Dimension import Dimension
 from tm1doc.Cube import Cube
@@ -9,7 +10,6 @@ from tm1doc.ODBC import ODBC
 from tm1doc.Text import Text
 
 from graphviz import Digraph
-
 
 from TM1py.Services import TM1Service
 
@@ -46,7 +46,8 @@ class Server(object):
 
     def get_source_to_dimension_mapping(self):
 
-        dimensions = OrderedDict((dimension.name, {'process': None, 'source': None, 'source_type': None}) for dimension in self.dimensions)
+        dimensions = OrderedDict(
+            (dimension.name, {'process': None, 'source': None, 'source_type': None}) for dimension in self.dimensions)
 
         for process in self.processes:
             # flow =  {'process_name'}
@@ -58,7 +59,7 @@ class Server(object):
                         dimensions[target.name]['source'] = source.name
                         dimensions[target.name]['source_type'] = source.__class__.__name__
 
-        #print(dimensions)
+        # print(dimensions)
         return dimensions
 
     def create_dataflow_graph(self):
@@ -118,6 +119,54 @@ class Server(object):
                         password=self.server_password,
                         ssl=True) as tm1:
             return tm1.server.get_server_name()
+
+    def get_process_overview(self):
+        with TM1Service(address=self.server_adress,
+                        port=self.server_port,
+                        user=self.server_user,
+                        password=self.server_password,
+                        ssl=True) as tm1:
+            log = tm1.server.get_message_log_entries()
+
+            process_names = pd.DataFrame.from_records([[process.name, True] for process in self.processes])
+            process_names = process_names.set_index(0)
+            process_names = process_names.rename(columns={1: 'process_exists'})
+
+            # TODO: horrible horrible things, make it go away!
+            df = pd.DataFrame.from_records(log)
+            process_log = df[df.Logger == 'TM1.Process']
+            process_log.head()
+            process_name = process_log['Message'].str.extract('"([^"]*)"').rename(columns={0: "process_name"})
+            process_duration = process_log['Message'].str.extract('([0-9]*\.[0-9]*)').rename(
+                columns={0: "process_duration"})
+            # process_log['process_name']
+            process_log = process_log.join(process_name)
+            process_log = process_log.join(process_duration)
+            # drop non runtime related
+            process_log = process_log[
+                (process_log.process_name.notnull()) & (process_log.process_duration.notnull()) & (
+                        process_log['Level'] == 'Info')]
+            # process_log['process_duration'] = pd.to_numeric(process_log['process_duration'])#
+
+            last_runs = process_log.groupby('process_name').tail(7)
+            last_runs['process_duration'] = pd.to_numeric(last_runs['process_duration'])
+            metrics = last_runs.groupby('process_name')['process_duration'].mean()
+            # metrics = metrics.rename(columns={"process_duration": "Average Duration"})
+
+            last_run = last_runs.groupby('process_name').tail(1)
+            last_run = last_run.set_index('process_name')
+            last_run = last_run.rename(columns={"process_duration": "Last duration", "TimeStamp": 'Last successful run'})
+            # last_run =
+            metrics = pd.concat([metrics, last_run], axis=1, join_axes=[metrics.index])
+            metrics = metrics.join(process_names, how='outer')
+            metrics = metrics.reset_index()
+            metrics = metrics.rename(columns={"process_duration": "Average duration", 'index': 'Process name'})
+            metrics = metrics[
+                ['Process name', 'Average duration', 'Last duration', 'Last successful run', 'process_exists']]
+            metrics = metrics.round({'Average duration': 1, 'Last duration':1})
+            metrics = metrics.fillna('-')
+
+        return metrics.to_dict('records')
 
     def call_api(self, call_method):
         """ calls REST API with method

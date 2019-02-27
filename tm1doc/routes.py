@@ -62,6 +62,24 @@ def dimensions():
                            )
 
 
+@tm1doc.route('/processes')
+def processes():
+    context['session'] = session
+    try:
+        tm1_server = instances[session['instance_id']]
+    except KeyError:
+        flash('Select an Instance')
+        return redirect(url_for('index'))
+
+    processes = tm1_server.get_process_overview()
+
+    #filtered_dimensions =
+
+    #dimensions = filter(filter_technical_objects, dimensions.iteritems() )
+    return render_template('processes.html', context=context, title='Processes',
+                           processes=processes,
+                           )
+
 @tm1doc.route('/select_instance/<instance_name>')
 def select_instance(instance_name):
     # find instance
