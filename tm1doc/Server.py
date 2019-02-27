@@ -121,6 +121,9 @@ class Server(object):
             return tm1.server.get_server_name()
 
     def get_process_overview(self):
+        if not Config.process_logs_in_batch():
+            return None
+
         with TM1Service(address=self.server_adress,
                         port=self.server_port,
                         user=self.server_user,

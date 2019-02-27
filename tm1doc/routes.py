@@ -54,12 +54,7 @@ def dimensions():
 
     dimensions = tm1_server.get_source_to_dimension_mapping()
 
-    #filtered_dimensions =
-
-    #dimensions = filter(filter_technical_objects, dimensions.iteritems() )
-    return render_template('dimensions.html', context=context, title='Dimensions',
-                           dimensions=dimensions,
-                           )
+    return render_template('dimensions.html', context=context, title='Dimensions', dimensions=dimensions, )
 
 
 @tm1doc.route('/processes')
@@ -73,12 +68,17 @@ def processes():
 
     processes = tm1_server.get_process_overview()
 
-    #filtered_dimensions =
+    if processes is None:
+        flash('Feature disabled by config')
+        return redirect(url_for('overview'))
 
-    #dimensions = filter(filter_technical_objects, dimensions.iteritems() )
+    # filtered_dimensions =
+
+    # dimensions = filter(filter_technical_objects, dimensions.iteritems() )
     return render_template('processes.html', context=context, title='Processes',
                            processes=processes,
                            )
+
 
 @tm1doc.route('/select_instance/<instance_name>')
 def select_instance(instance_name):
@@ -113,7 +113,7 @@ def overview():
                            cubes=filter(filter_technical_objects, tm1_server.cubes),
                            dimensions=filter(filter_technical_objects, tm1_server.dimensions),
                            processes=filter(filter_technical_objects, tm1_server.processes),
-                           #server=tm1_server.get_server_name(),
+                           # server=tm1_server.get_server_name(),
                            )
 
 
