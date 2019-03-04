@@ -11,7 +11,8 @@ class Config:
         # There has to be at least one instance.
         #
         instances = []
-        instances.append({'address': 'https://127.0.0.1:42/api/v1/',
+        instances.append({'address': '127.0.0.1',
+                          'port': '8080',
                           'user': 'admin',
                           'password': 'apple',
                           'ssl_verify': False,
